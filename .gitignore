@@ -142,3 +142,4 @@ local.properties
 !.vscode/launch.json
 
 # End of file
+/src/generated/prisma

@@ -3,6 +3,8 @@ const app = express();
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const port = process.env.PORT || 8000;
 
