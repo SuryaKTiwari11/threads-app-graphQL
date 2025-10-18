@@ -4,9 +4,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Run tests manually in Postman - See TESTING_GUIDE.md\"",
     "start": "node build/index.js",
-    "dev": "tsc-watch --onSuccess \"npm start\" "
+    "dev": "tsc-watch --onSuccess \"npm start\" ",
+    "build": "tsc",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "setup": "npm install && npx prisma generate && docker-compose up -d && npx prisma migrate dev"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +18,8 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.11.0",
     "prisma": "^6.17.1",
     "ts-node": "^10.9.2",
     "tsc-watch": "^7.2.0",
@@ -26,6 +32,7 @@
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }

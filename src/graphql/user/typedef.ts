@@ -10,6 +10,9 @@ export const typeDefs = `#graphql
   type Query {
     ping: String
     say(name: String): String
+    getUserById(id: ID!): User
+    verifyToken(token: String!): User
+    getCurrentLoggedInUser: User
   }
 
   type Mutation {
@@ -19,6 +22,11 @@ export const typeDefs = `#graphql
       email: String!
       password: String!
       profileImageURL: String
-    ): Boolean!
+    ): String!
+    
+    loginUser(
+      email: String!
+      password: String!
+    ): String!
   }
 `;

@@ -1,5 +1,8 @@
-import crypto from "crypto";
-import { prismaClient } from "../../lib/db.js";
+import UserService from "../../services/user.js";
+import type {
+  CreateUserPayload,
+  UserTokenPayload,
+} from "../../services/user.js";
 
 export const mutations = {
   createUser: async (
@@ -18,22 +21,36 @@ export const mutations = {
       profileImageURL?: string;
     }
   ) => {
-    const salt = crypto.randomBytes(16).toString("hex");
+    try {
+      const payload: CreateUserPayload = {
+        firstName,
+        lastName,
+        email,
+        password,
+        ...(profileImageURL && { profileImageURL }),
+      };
 
-    const userData: any = {
-      email,
-      firstName,
-      lastName,
-      password,
-      salt,
-    };
-
-    if (profileImageURL) {
-      userData.profileImageURL = profileImageURL;
+      const userId = await UserService.createUser(payload);
+      return userId;
+    } catch (error: any) {
+      throw new Error(error.message || "Failed to create user");
     }
+  },
 
-    await prismaClient.user.create({ data: userData });
+  loginUser: async (
+    _: any,
+    { email, password }: { email: string; password: string }
+  ) => {
+    try {
+      const payload: UserTokenPayload = {
+        email,
+        password,
+      };
 
-    return true;
+      const token = await UserService.getUserToken(payload);
+      return token;
+    } catch (error: any) {
+      throw new Error(error.message || "Failed to login");
+    }
   },
 };

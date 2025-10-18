@@ -1,0 +1,439 @@
+{
+  "info": {
+    "name": "Threads App Backend API",
+    "description": "Complete test collection for Threads App GraphQL API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health & Basic Queries",
+      "item": [
+        {
+          "name": "1. Ping - Health Check",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  ping\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "2. Say Hello (with name)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  say(name: \"Alice\")\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "3. Say Hello (without name)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  say\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "4. Create User - Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(\n    firstName: \"John\"\n    lastName: \"Doe\"\n    email: \"john.doe@example.com\"\n    password: \"SecurePass123!\"\n    profileImageURL: \"https://i.pravatar.cc/150?img=1\"\n  )\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "5. Create User - Without Profile Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(\n    firstName: \"Alice\"\n    lastName: \"Smith\"\n    email: \"alice.smith@example.com\"\n    password: \"AlicePass789\"\n  )\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "6. Create User - Duplicate Email (Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(\n    firstName: \"Jane\"\n    lastName: \"Doe\"\n    email: \"john.doe@example.com\"\n    password: \"AnotherPass456\"\n  )\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "7. Login User - Success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.loginUser) {",
+                  "    pm.environment.set(\"jwt_token\", jsonData.data.loginUser);",
+                  "    console.log(\"Token saved: \" + jsonData.data.loginUser);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  loginUser(\n    email: \"john.doe@example.com\"\n    password: \"SecurePass123!\"\n  )\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "8. Login User - Wrong Password (Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  loginUser(\n    email: \"john.doe@example.com\"\n    password: \"WrongPassword\"\n  )\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "9. Login User - Non-existent User (Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  loginUser(\n    email: \"nonexistent@example.com\"\n    password: \"SomePassword\"\n  )\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Queries",
+      "item": [
+        {
+          "name": "10. Get User By ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getUserById(id: \"REPLACE_WITH_USER_ID\") {\n    id\n    firstName\n    lastName\n    email\n    profileImageURL\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "11. Get User By ID - Invalid ID (Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getUserById(id: \"invalid-id-12345\") {\n    id\n    firstName\n    lastName\n    email\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "12. Verify Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  verifyToken(token: \"{{jwt_token}}\") {\n    id\n    firstName\n    lastName\n    email\n    profileImageURL\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "13. Verify Token - Invalid Token (Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  verifyToken(token: \"invalid.token.here\") {\n    id\n    firstName\n    lastName\n    email\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Protected Queries (Authenticated)",
+      "item": [
+        {
+          "name": "14. Get Current Logged In User (Authenticated)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getCurrentLoggedInUser {\n    id\n    firstName\n    lastName\n    email\n    profileImageURL\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "15. Get Current User - No Token (Error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getCurrentLoggedInUser {\n    id\n    firstName\n    lastName\n    email\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/graphql",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
