@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -16,4 +15,24 @@ datasource db {
 
 model User {
   id String @id @default(uuid())
+  firstName String @map("first_name")
+  lastName String @map("last_name")
+  //in db we prefer snakecase where as in code we prefer camel
+  email String @unique
+  password String
+  salt String
+  profileImageURL String @default("https://via.placeholder.com/150") @map("profile_image_url")
+
+  @@map("users")
+  
 }
+
+//open terminal after doing This
+//write:docker ps
+//write:docker exec -it "COPY ID" bash 
+//to enter the db terminal
+//write: su postgres
+//write psql
+
+//write: \c threads
+//try \c or \d
